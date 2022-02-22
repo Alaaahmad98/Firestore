@@ -1,17 +1,16 @@
 package com.example.firestore.presentation.user
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.firestore.domain.usecase.AddUserUseCase
-import kotlinx.coroutines.launch
 
 class UserViewModel(
+    private val app: Application,
     private val addUserUseCase: AddUserUseCase
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
-    fun addUser(username: String, userProfile: String) {
-        viewModelScope.launch {
-            addUserUseCase.execute(username, userProfile)
-        }
+    fun addUser(username: String, userProfile: String) = liveData {
+        val result = addUserUseCase.execute(username, userProfile)
+        emit(result)
     }
 }
